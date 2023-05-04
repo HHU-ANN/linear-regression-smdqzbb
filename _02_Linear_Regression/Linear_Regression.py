@@ -10,9 +10,21 @@ except ImportError as e:
 
 def ridge(data):
     X,y = read_data()
-    weight = np.matmul(np.linalg.inv(np.matmul(X.T,X)),np.matmul(X.T,y))
-    return weight @ data
-    
+    yMean = numpy.mean(yMat, 0)
+    yMat = yMat - yMean
+    xMeans = numpy.mean(xMat, 0)
+    xVar = numpy.var(xMat, 0)
+    xMat = (xMat - xMeans) / xVar
+    xTx = xMat.T * xMat
+    denom = xTx + numpy.eye(numpy.shape(xMat)[1]) * numpy.exp(-9)
+    if numpy.linalg.det(denom) == 0.0:
+        print("This matrix is singular, cannot do inverse")
+        return
+    ws = denom.I * (xMat.T * yMat)
+    return ws.T
+    except Exception:
+    return numpy.nan
+
 def lasso(data):
     X,y = read_data()
     weight = np.matmul(np.linalg.inv(np.matmul(X.T,X)),np.matmul(X.T,y))
