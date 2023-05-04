@@ -24,7 +24,18 @@ def ridge(data):
     return ws.T
     except Exception:
     return numpy.nan
-
+def calculate(ml_data, ml_label, calculate_data):
+    ws = ridge_regres(ml_data, ml_label)
+    if (isinstance(ws, float) or isinstance(ws, numpy.float64)) and (numpy.isnan(ws) 
+    or numpy.isnan(ws[0][0])):
+        return numpy.nan
+    calculateMat = numpy.mat(calculate_data)
+    xMat = numpy.mat(ml_data)
+    xMeans = numpy.mean(xMat, 0)
+    xVar = numpy.var(xMat, 0)
+    calculateMat = (calculateMat - xMeans) / xVar
+    calculate_result = calculateMat * numpy.mat(ws).T + numpy.mean(ml_label)
+    print (calculate_result)
 def lasso(data):
     X,y = read_data()
     weight = np.matmul(np.linalg.inv(np.matmul(X.T,X)),np.matmul(X.T,y))
