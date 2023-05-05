@@ -9,9 +9,12 @@ except ImportError as e:
     import numpy as np
 
 def ridge(data):
-    X,y = read_data()
-    weight = np.matmul(np.linalg.inv(np.matmul(X.T,X)),np.matmul(X.T,y))
-    return weight @ data
+    X, y = read_data()
+    alpha = -0.1
+    XT_X = np.dot(X.T, X)
+    I = np.identity(XT_X.shape[0])
+    weight = np.dot(np.dot(np.linalg.inv(XT_X + alpha * I), X.T), y)
+    return weight @
 def lasso(data):
     X,y = read_data()
     weight = np.matmul(np.linalg.inv(np.matmul(X.T,X)),np.matmul(X.T,y))
